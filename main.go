@@ -7,9 +7,15 @@ import (
 	"time"
 
 	"github.com/bramalho/jira-tasks/controller"
-
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
+
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("No .env file found")
+	}
+}
 
 func main() {
 	router := mux.NewRouter()
