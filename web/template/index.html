@@ -17,22 +17,16 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Name</th>
+                    <th scope="col">...</th>
                 </tr>
             </thead>
             <tbody>
+                {{range .Users}}
                 <tr>
-                    <th scope="row">1</th>
-                    <td>One</td>
+                    <th scope="row">{{.Name}}</th>
+                    <td>...</td>
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Two</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Three</td>
-                </tr>
+                {{end}}
             </tbody>
         </table>
     </div>
