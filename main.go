@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/bramalho/jira-tasks/controller"
@@ -26,14 +27,19 @@ func main() {
 		json.NewEncoder(w).Encode(map[string]bool{"ok": true})
 	})
 
-	log.Println("Application is running on localhost:8080")
+	port, exists := os.LookupEnv("PORT")
+	if exists == false {
+		port = "8080"
+	}
 
 	srv := &http.Server{
 		Handler:      router,
-		Addr:         "localhost:8080",
+		Addr:         "localhost:" + port,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
+
+	log.Println("Application is running on localhost:" + port)
 
 	log.Fatal(srv.ListenAndServe())
 }
