@@ -4,17 +4,17 @@ import (
 	"os"
 	"strings"
 
+	"github.com/bramalho/jira-tasks/client"
 	"github.com/bramalho/jira-tasks/model"
 )
 
-func getUsers() []model.User {
-	users := []model.User{}
+func getUserNames() []string {
+	users := []string{}
 	if data, exists := os.LookupEnv("USERS"); exists {
 		result := strings.Split(data, ",")
 		for i := range result {
 			if len(result[i]) > 0 {
-				u := model.User{Name: result[i]}
-				users = append(users, u)
+				users = append(users, result[i])
 			}
 		}
 	}
@@ -24,6 +24,22 @@ func getUsers() []model.User {
 
 // New jira service
 func New() []model.User {
-	users := getUsers()
+	users := []model.User{}
+	userNames := getUserNames()
+	jiraClient := client.InitClient()
+
+	for _, u := range userNames {
+		user, _, _ := jiraClient.User.Get(u)
+
+		users = append(users, model.User{
+			Name:       user.DisplayName,
+			Avatar:     user.AvatarUrls.One6X16,
+			ToDo:       client.Query(jiraClient, u, "QUERY_TODO"),
+			InProgress: client.Query(jiraClient, u, "QUERY_IN_PROGRESS"),
+			ToReview:   client.Query(jiraClient, u, "QUERY_TO_REVIEW"),
+			Done:       client.Query(jiraClient, u, "QUERY_DONE"),
+		})
+	}
+
 	return users
 }
