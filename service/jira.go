@@ -29,16 +29,18 @@ func New() []model.User {
 	jiraClient := client.InitClient()
 
 	for _, u := range userNames {
-		user, _, _ := jiraClient.User.Get(u)
+		user, _, err := jiraClient.User.Get(u)
 
-		users = append(users, model.User{
-			Name:       user.DisplayName,
-			Avatar:     user.AvatarUrls.One6X16,
-			ToDo:       client.Query(jiraClient, u, "QUERY_TODO"),
-			InProgress: client.Query(jiraClient, u, "QUERY_IN_PROGRESS"),
-			ToReview:   client.Query(jiraClient, u, "QUERY_TO_REVIEW"),
-			Done:       client.Query(jiraClient, u, "QUERY_DONE"),
-		})
+		if err == nil {
+			users = append(users, model.User{
+				Name:       user.DisplayName,
+				Avatar:     user.AvatarUrls.One6X16,
+				ToDo:       client.Query(jiraClient, u, "QUERY_TODO"),
+				InProgress: client.Query(jiraClient, u, "QUERY_IN_PROGRESS"),
+				ToReview:   client.Query(jiraClient, u, "QUERY_TO_REVIEW"),
+				Done:       client.Query(jiraClient, u, "QUERY_DONE"),
+			})
+		}
 	}
 
 	return users
