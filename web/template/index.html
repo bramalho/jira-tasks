@@ -25,6 +25,7 @@
             </thead>
             <tbody>
                 {{range .Users}}
+                {{if .}}
                 <tr>
                     <th scope="row">
                         <img src="{{.Avatar}}" height="32px" class="rounded float-left pr-2">
@@ -35,6 +36,7 @@
                     <td>{{.ToReview}}</td>
                     <td>{{.Done}}</td>
                 </tr>
+                {{end}}
                 {{end}}
             </tbody>
         </table>

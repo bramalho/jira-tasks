@@ -1,7 +1,6 @@
 package client
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -29,16 +28,9 @@ func InitClient() *jira.Client {
 
 // Query JQL
 func Query(c *jira.Client, u string, q string) int {
-	total := 0
-
 	query, _ := os.LookupEnv(q)
 	query = strings.Replace(query, "%user%", u, 1)
 	issues, _, _ := c.Issue.Search(query, nil)
 
-	for _, issue := range issues {
-		total++
-		fmt.Printf("%s - %s: %+v\n", u, issue.Key, issue.Fields.Summary)
-	}
-
-	return total
+	return len(issues)
 }

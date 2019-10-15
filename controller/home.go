@@ -12,7 +12,7 @@ import (
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("web/template/index.html"))
 	tmpl.Execute(w, struct {
-		Users []model.User
+		Users []*model.User
 	}{
 		service.New(),
 	})
