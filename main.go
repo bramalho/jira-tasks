@@ -7,7 +7,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/bramalho/jira-tasks/controller"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
@@ -21,7 +20,7 @@ func init() {
 func main() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/", controller.HomeHandler).Methods("GET")
+	router.HandleFunc("/", HomeHandler).Methods("GET")
 
 	router.HandleFunc("/ok", func(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]bool{"ok": true})

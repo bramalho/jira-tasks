@@ -1,13 +1,10 @@
-package service
+package main
 
 import (
 	"os"
 	"sort"
 	"strings"
 	"sync"
-
-	"github.com/bramalho/jira-tasks/client"
-	"github.com/bramalho/jira-tasks/model"
 )
 
 func getUserNames() []string {
@@ -26,12 +23,12 @@ func getUserNames() []string {
 	return users
 }
 
-// New jira service
-func New() []*model.User {
+// GetUserData from jira
+func GetUserData() []*User {
 	userNames := getUserNames()
-	jiraClient := client.InitClient()
+	jiraClient := InitClient()
 
-	users := make([]*model.User, len(userNames))
+	users := make([]*User, len(userNames))
 
 	var wg sync.WaitGroup
 	wg.Add(len(userNames))
@@ -43,13 +40,13 @@ func New() []*model.User {
 			user, _, err := jiraClient.User.Get(u)
 
 			if err == nil {
-				newUser := model.User{
+				newUser := User{
 					Name:       user.DisplayName,
 					Avatar:     user.AvatarUrls.One6X16,
-					ToDo:       client.Query(jiraClient, u, "QUERY_TODO"),
-					InProgress: client.Query(jiraClient, u, "QUERY_IN_PROGRESS"),
-					ToReview:   client.Query(jiraClient, u, "QUERY_TO_REVIEW"),
-					Done:       client.Query(jiraClient, u, "QUERY_DONE"),
+					ToDo:       Query(jiraClient, u, "QUERY_TODO"),
+					InProgress: Query(jiraClient, u, "QUERY_IN_PROGRESS"),
+					ToReview:   Query(jiraClient, u, "QUERY_TO_REVIEW"),
+					Done:       Query(jiraClient, u, "QUERY_DONE"),
 				}
 
 				users[i] = &newUser

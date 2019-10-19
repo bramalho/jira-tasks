@@ -3,5 +3,5 @@
 ## Install
 
 ```
-go get github.com/bramalho/jira-tasks
+go install
 ```
